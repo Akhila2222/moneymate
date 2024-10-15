@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import uk.ac.tees.mad.moneymate.presentation.login_register.LoginScreen
+import uk.ac.tees.mad.moneymate.presentation.splash.SplashScreen
 import uk.ac.tees.mad.moneymate.ui.theme.MoneyMateTheme
 
 class MainActivity : ComponentActivity() {
