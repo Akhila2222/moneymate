@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.moneymate.presentation.login_register
+package uk.ac.tees.mad.moneymate.presentation.auth
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
