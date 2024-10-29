@@ -68,6 +68,14 @@ fun AuthScreen(
     val rotation = remember { Animatable(0f) }
     val scale = remember { Animatable(1f) }
 
+    LaunchedEffect(Unit) {
+        if (viewModel.isAuthenticated()) {
+            navController.navigate("dashboard_screen") {
+                popUpTo("login_screen") { inclusive = true }
+            }
+        }
+    }
+
     LaunchedEffect(isLoginScreen) {
         rotation.animateTo(
             targetValue = 360f,
@@ -156,7 +164,7 @@ fun AuthScreen(
                             focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                             unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                             unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
-                        ),     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                        ), keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }

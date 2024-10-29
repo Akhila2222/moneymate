@@ -3,6 +3,7 @@ package uk.ac.tees.mad.moneymate.presentation.category
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,27 +24,27 @@ class CategoryViewModel @Inject constructor(
     }
 
     fun getCategories() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _categories.value = categoryDao.getAllCategories()
         }
     }
 
     fun addCategory(category: Category) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             categoryDao.insertCategory(category)
             getCategories()
         }
     }
 
     fun updateCategory(category: Category) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             categoryDao.updateCategory(category)
             getCategories()
         }
     }
 
     fun deleteCategory(category: Category) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             categoryDao.deleteCategory(category)
             getCategories()
         }

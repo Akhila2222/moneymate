@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import uk.ac.tees.mad.moneymate.presentation.auth.AuthScreen
+import uk.ac.tees.mad.moneymate.presentation.category.CategoryScreen
 import uk.ac.tees.mad.moneymate.presentation.dashboard.DashboardScreen
 import uk.ac.tees.mad.moneymate.presentation.expenseentry.ExpenseEntryScreen
 import uk.ac.tees.mad.moneymate.presentation.splash.SplashScreen
@@ -35,6 +36,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("entry_screen") {
                         ExpenseEntryScreen(navController)
+                    }
+                    composable("category_screen") {
+                        CategoryScreen(navController)
                     }
                 }
             }
