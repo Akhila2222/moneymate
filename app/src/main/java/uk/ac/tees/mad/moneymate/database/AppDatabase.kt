@@ -1,12 +1,12 @@
 package uk.ac.tees.mad.moneymate.database
 
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
+import androidx.room.TypeConverters
 
-@Database(entities = [Category::class, Expense::class], version = 1)
-abstract class CategoryDatabase : RoomDatabase() {
+@Database(entities = [Category::class, Expense::class], version = 3)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun expenseDao(): ExpenseDao
 }

@@ -12,6 +12,5 @@ data class Expense(
     val description: String,
     val date: Date,
     val isIncome: Boolean,
-    val notes: String? = null,
     val attachment: String? = null
 )

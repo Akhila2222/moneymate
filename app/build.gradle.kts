@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "uk.ac.tees.mad.moneymate"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -71,6 +71,7 @@ dependencies {
 
     // Hilt for Dependency Injection
     implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation(libs.firebase.storage.ktx)
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 

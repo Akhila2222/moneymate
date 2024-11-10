@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.moneymate.presentation.expenseentry
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,9 @@ class ExpenseViewModel @Inject constructor(
 
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
+
+    private val _attachmentUri = MutableStateFlow<Uri?>(null)
+    val attachmentUri = _attachmentUri.asStateFlow()
 
     fun getAllExpenses() {
         viewModelScope.launch {
@@ -64,6 +68,9 @@ class ExpenseViewModel @Inject constructor(
                 _error.value = "Failed to delete expense: ${e.message}"
             }
         }
+    }
+    fun setAttachmentUri(uri: Uri?) {
+        _attachmentUri.value = uri
     }
 
     fun clearError() {

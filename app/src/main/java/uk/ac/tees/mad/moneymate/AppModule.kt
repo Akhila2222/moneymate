@@ -9,9 +9,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import uk.ac.tees.mad.moneymate.database.CategoryDatabase
+import uk.ac.tees.mad.moneymate.database.AppDatabase
 import uk.ac.tees.mad.moneymate.database.ExpenseDao
 import uk.ac.tees.mad.moneymate.firestore.FirestoreDataSource
+import uk.ac.tees.mad.moneymate.firestore.StorageDataSource
 import uk.ac.tees.mad.moneymate.repo.ExpenseRepository
 import javax.inject.Singleton
 
@@ -33,19 +34,22 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
-        context.applicationContext,
-        CategoryDatabase::class.java,
-        "category_database"
-    ).build()
+    fun providesDatabase(@ApplicationContext context: Context) = Room
+        .databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "moneymate_database"
+        )
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Singleton
     @Provides
-    fun providesDao(db: CategoryDatabase) = db.categoryDao()
+    fun providesDao(db: AppDatabase) = db.categoryDao()
 
 
     @Provides
-    fun provideExpenseDao(db: CategoryDatabase): ExpenseDao {
+    fun provideExpenseDao(db: AppDatabase): ExpenseDao {
         return db.expenseDao()
     }
 
@@ -59,8 +63,9 @@ object AppModule {
     @Singleton
     fun provideExpenseRepository(
         expenseDao: ExpenseDao,
-        firestoreDataSource: FirestoreDataSource
+        firestoreDataSource: FirestoreDataSource,
+        storageDataSource: StorageDataSource
     ): ExpenseRepository {
-        return ExpenseRepository(expenseDao, firestoreDataSource)
+        return ExpenseRepository(expenseDao, firestoreDataSource, storageDataSource)
     }
 }
