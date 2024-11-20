@@ -31,16 +31,14 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // First, try to sync data from Firestore if the local database is empty
                 expenseRepository.syncExpensesFromFirestore()
 
-                // Now, collect expenses from the local database
                 expenseRepository.getAllExpenses().collect { expenses ->
                     val income = expenses.filter { it.isIncome }.sumOf { it.amount }
                     val expense = expenses.filter { !it.isIncome }.sumOf { it.amount }
                     val categoryData = expenses.groupBy { it.category }
                         .mapValues { (_, expenses) -> expenses.sumOf { it.amount } }
-                    val savingsGoal = 1000.0 // This could be fetched from user preferences
+                    val savingsGoal = 1000.0 // From user preferences
                     val progress = ((income - expense) / savingsGoal).coerceAtMost(1.0)
 
                     _dashboardState.value = DashboardState(

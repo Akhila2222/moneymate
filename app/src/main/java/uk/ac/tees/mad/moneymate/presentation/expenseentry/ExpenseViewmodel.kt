@@ -37,10 +37,10 @@ class ExpenseViewModel @Inject constructor(
         }
     }
 
-    fun addExpense(expense: Expense) {
+    fun addExpense(expense: Expense, onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
-                expenseRepository.addExpense(expense)
+                expenseRepository.addExpense(expense, onSuccess = onSuccess)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Failed to add expense: ${e.message}"

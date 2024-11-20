@@ -75,7 +75,6 @@ fun ExpenseEntryScreen(
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var isIncome by remember { mutableStateOf(true) }
-    var notes by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(LocalDate.now()) }
 
     val datePickerState = rememberDatePickerState()
@@ -238,11 +237,13 @@ fun ExpenseEntryScreen(
                         description = description,
                         date = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                         isIncome = isIncome,
-                        attachment = attachmentUri.toString()
+                        attachment = if (attachmentUri == null) null else attachmentUri.toString()
                     )
 
-                    expenseViewModel.addExpense(expense)
-                    navController.popBackStack()
+                    expenseViewModel.addExpense(
+                        expense,
+                        onSuccess = { navController.popBackStack() }
+                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
