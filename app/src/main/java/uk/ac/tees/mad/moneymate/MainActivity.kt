@@ -34,8 +34,9 @@ class MainActivity : ComponentActivity() {
                     composable("dashboard_screen") {
                         DashboardScreen(navController)
                     }
-                    composable("entry_screen") {
-                        ExpenseEntryScreen(navController)
+                    composable("entry_screen/{expenseId}") {
+                        val expenseId = it.arguments?.getString("expenseId")?.toLongOrNull()
+                        ExpenseEntryScreen(navController, expenseId)
                     }
                     composable("category_screen") {
                         CategoryScreen(navController)

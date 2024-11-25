@@ -1,6 +1,7 @@
 package uk.ac.tees.mad.moneymate.repo
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import uk.ac.tees.mad.moneymate.database.Expense
 import uk.ac.tees.mad.moneymate.database.ExpenseDao
@@ -35,8 +36,8 @@ class ExpenseRepository @Inject constructor(
             expense
         }
         expenseDao.insertExpense(expenseWithAttachment)
-        onSuccess()
         firestoreDataSource.saveExpenseToFirestore(expenseWithAttachment)
+        onSuccess()
     }
 
     suspend fun updateExpense(expense: Expense) {
@@ -47,7 +48,7 @@ class ExpenseRepository @Inject constructor(
             } else {
                 expense
             }
-        expenseDao.updateExpense(expenseWithAttachment)
+        expenseDao.insertExpense(expenseWithAttachment)
         firestoreDataSource.updateExpenseInFirestore(expenseWithAttachment)
     }
 
@@ -55,5 +56,9 @@ class ExpenseRepository @Inject constructor(
         expenseDao.deleteExpense(expense)
         firestoreDataSource.deleteExpenseFromFirestore(expense.id)
         expense.attachment?.let { storageDataSource.deleteAttachment(it) }
+    }
+
+    fun getExpenseById(expenseId: Long): Expense {
+        return expenseDao.getExpenseById(expenseId)
     }
 }

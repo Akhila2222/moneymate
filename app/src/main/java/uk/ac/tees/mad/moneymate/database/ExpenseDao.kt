@@ -8,11 +8,11 @@ interface ExpenseDao {
     @Query("SELECT * FROM expenses ORDER BY date DESC")
     fun getAllExpenses(): Flow<List<Expense>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertExpense(expense: Expense)
 
-    @Update
-    suspend fun updateExpense(expense: Expense)
+    @Query("SELECT * FROM expenses WHERE id=:expenseId")
+    fun getExpenseById(expenseId: Long): Expense
 
     @Delete
     suspend fun deleteExpense(expense: Expense)

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import uk.ac.tees.mad.moneymate.database.Expense
@@ -20,6 +21,9 @@ class ExpenseViewModel @Inject constructor(
 
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
     private val _attachmentUri = MutableStateFlow<Uri?>(null)
     val attachmentUri = _attachmentUri.asStateFlow()
@@ -40,12 +44,17 @@ class ExpenseViewModel @Inject constructor(
     fun addExpense(expense: Expense, onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 expenseRepository.addExpense(expense, onSuccess = onSuccess)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Failed to add expense: ${e.message}"
             }
         }
+    }
+
+     fun getExpenseById(expenseId: Long): Expense {
+        return expenseRepository.getExpenseById(expenseId)
     }
 
     fun updateExpense(expense: Expense) {
@@ -69,6 +78,7 @@ class ExpenseViewModel @Inject constructor(
             }
         }
     }
+
     fun setAttachmentUri(uri: Uri?) {
         _attachmentUri.value = uri
     }

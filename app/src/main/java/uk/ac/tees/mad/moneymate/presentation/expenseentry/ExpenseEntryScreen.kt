@@ -37,6 +37,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import uk.ac.tees.mad.moneymate.database.Category
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import uk.ac.tees.mad.moneymate.database.Expense
 import uk.ac.tees.mad.moneymate.presentation.category.CategoryViewModel
 import java.time.Instant
@@ -64,34 +66,64 @@ import java.util.Date
 @Composable
 fun ExpenseEntryScreen(
     navController: NavHostController,
+    expenseId: Long?,
     expenseViewModel: ExpenseViewModel = hiltViewModel(),
     categoryViewModel: CategoryViewModel = hiltViewModel(),
 ) {
     val categories by categoryViewModel.categories.collectAsState(initial = emptyList())
     val errorMessage by expenseViewModel.error.collectAsState()
+    var existingExpense by remember {
+        mutableStateOf<Expense?>(null)
+    }
 
     val attachmentUri by expenseViewModel.attachmentUri.collectAsState()
-    var selectedCategory by remember { mutableStateOf<Category?>(null) }
+
+    var selectedCategory by remember {
+        mutableStateOf(existingExpense?.category?.let { categoryName -> categories.find { it.name == categoryName } })
+    }
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var isIncome by remember { mutableStateOf(true) }
-    var date by remember { mutableStateOf(LocalDate.now()) }
+    var date by remember {
+        mutableStateOf(
+            LocalDate.now()
+        )
+    }
+    var attachmentUrl by remember { mutableStateOf(existingExpense?.attachment) }
 
     val datePickerState = rememberDatePickerState()
     var showDatePicker by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
+
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { expenseViewModel.setAttachmentUri(it) }
         }
+
+    LaunchedEffect(Unit) {
+        launch(Dispatchers.IO) {
+            expenseId?.let {
+                existingExpense = expenseViewModel.getExpenseById(expenseId)
+            }
+            selectedCategory = existingExpense?.category?.let { categoryName ->
+                categories.find { it.name == categoryName }
+            }
+            amount = existingExpense?.amount?.toString() ?: ""
+            description = existingExpense?.description ?: ""
+            isIncome = existingExpense?.isIncome ?: true
+            date = existingExpense?.date?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+                ?: LocalDate.now()
+            attachmentUrl = existingExpense?.attachment
+
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Add New Expense/Income",
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        text = if (existingExpense == null) "Add New Expense/Income" else "Edit Expense/Income"
                     )
                 },
                 navigationIcon = {
@@ -126,8 +158,6 @@ fun ExpenseEntryScreen(
                     }
                 }
             )
-
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -198,17 +228,33 @@ fun ExpenseEntryScreen(
             }
 
             // Display selected image
-            attachmentUri?.let { uri ->
-                Image(
-                    painter = rememberAsyncImagePainter(uri),
-                    contentDescription = "Attachment",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Crop
-                )
+            if (attachmentUri != null) {
+                attachmentUri?.let { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = "Attachment",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            } else if (attachmentUrl != null) {
+                attachmentUrl?.let { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = "Attachment",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             // Income/Expense toggle
@@ -232,22 +278,22 @@ fun ExpenseEntryScreen(
             Button(
                 onClick = {
                     val expense = Expense(
+                        id = existingExpense?.id ?: 0,  // If editing, use existing id
                         category = selectedCategory?.name.orEmpty(),
                         amount = amount.toDoubleOrNull() ?: 0.0,
                         description = description,
                         date = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                         isIncome = isIncome,
-                        attachment = if (attachmentUri == null) null else attachmentUri.toString()
+                        attachment = if (attachmentUri == null) attachmentUrl else attachmentUri.toString()
                     )
+                    expenseViewModel.addExpense(expense) {
+                        navController.popBackStack()
+                    }
 
-                    expenseViewModel.addExpense(
-                        expense,
-                        onSuccess = { navController.popBackStack() }
-                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Save Entry")
+                Text(text = if (existingExpense == null) "Save Entry" else "Update Entry")
             }
 
             // Show error message if any
@@ -259,6 +305,8 @@ fun ExpenseEntryScreen(
                 )
             }
         }
+
+        // Show date picker dialog
         if (showDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showDatePicker = false },
