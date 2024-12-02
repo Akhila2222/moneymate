@@ -18,12 +18,8 @@ class FirestoreDataSource {
     fun saveExpenseToFirestore(expense: Expense) {
         expenseCollection.document(expense.id.toString())
             .set(expense)
-            .addOnSuccessListener {
-
-            }
-            .addOnFailureListener {
-
-            }
+            .addOnSuccessListener {}
+            .addOnFailureListener { }
     }
 
     fun updateExpenseInFirestore(expense: Expense) {

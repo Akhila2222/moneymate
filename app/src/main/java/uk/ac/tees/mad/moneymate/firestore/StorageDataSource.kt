@@ -20,6 +20,13 @@ class StorageDataSource @Inject constructor() {
         return@withContext reference.downloadUrl.await().toString()
     }
 
+    suspend fun uploadUserImage(uri: Uri): String = withContext(Dispatchers.IO) {
+        val reference = storage.reference.child("users/${auth.currentUser?.uid}/pp/${uri.lastPathSegment}")
+        val uploadTask = reference.putFile(uri)
+        uploadTask.await()
+        return@withContext reference.downloadUrl.await().toString()
+    }
+
     suspend fun deleteAttachment(url: String) = withContext(Dispatchers.IO) {
         val reference = storage.getReferenceFromUrl(url)
         reference.delete().await()
