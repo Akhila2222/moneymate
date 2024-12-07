@@ -10,9 +10,10 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
+
 class PreferencesManager(private val dataStore: DataStore<Preferences>) {
 
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
     val themeSetting: Flow<ThemeMode> = dataStore.data.map { preferences ->
         preferences[PreferencesKeys.THEME_MODE]?.let { ThemeMode.fromString(it) } ?: ThemeMode.LIGHT

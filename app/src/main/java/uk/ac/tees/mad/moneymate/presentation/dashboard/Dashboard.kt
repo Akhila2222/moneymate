@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -93,6 +94,16 @@ fun DashboardScreen(
                         },
                         label = {
                             Text(text = "Categories")
+                        }
+                    )
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "profile_screen",
+                        onClick = { navController.navigate("profile_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Person, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Profile")
                         }
                     )
                 }

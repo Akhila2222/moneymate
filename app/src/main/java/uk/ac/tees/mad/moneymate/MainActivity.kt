@@ -12,6 +12,7 @@ import uk.ac.tees.mad.moneymate.presentation.auth.AuthScreen
 import uk.ac.tees.mad.moneymate.presentation.category.CategoryScreen
 import uk.ac.tees.mad.moneymate.presentation.dashboard.DashboardScreen
 import uk.ac.tees.mad.moneymate.presentation.expenseentry.ExpenseEntryScreen
+import uk.ac.tees.mad.moneymate.presentation.profile.ProfileScreen
 import uk.ac.tees.mad.moneymate.presentation.splash.SplashScreen
 import uk.ac.tees.mad.moneymate.ui.theme.MoneyMateTheme
 
@@ -40,6 +41,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("category_screen") {
                         CategoryScreen(navController)
+                    }
+                    composable("profile_screen") {
+                        ProfileScreen(navController)
                     }
                 }
             }

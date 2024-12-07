@@ -14,6 +14,7 @@ import uk.ac.tees.mad.moneymate.database.ExpenseDao
 import uk.ac.tees.mad.moneymate.firestore.FirestoreDataSource
 import uk.ac.tees.mad.moneymate.firestore.StorageDataSource
 import uk.ac.tees.mad.moneymate.repo.ExpenseRepository
+import uk.ac.tees.mad.moneymate.repo.UserRepository
 import javax.inject.Singleton
 
 @Module
@@ -67,5 +68,26 @@ object AppModule {
         storageDataSource: StorageDataSource
     ): ExpenseRepository {
         return ExpenseRepository(expenseDao, firestoreDataSource, storageDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStorageDataSource(): StorageDataSource {
+        return StorageDataSource()
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
+        return PreferencesManager(context.dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        storageDataSource: StorageDataSource,
+        firestore: FirebaseFirestore
+    ): UserRepository {
+        return UserRepository(firestore, storageDataSource)
     }
 }

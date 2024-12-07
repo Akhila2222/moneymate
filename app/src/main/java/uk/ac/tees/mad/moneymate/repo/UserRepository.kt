@@ -26,13 +26,17 @@ class UserRepository @Inject constructor(
         emit(userProfile)
     }
 
-    suspend fun updateUserProfile(userProfile: UserProfile) {
+    suspend fun updateUserProfile(userProfile: UserProfile, onSuccess: () -> Unit) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         if (userProfile.imageUri != null) {
             val url = updateUserImage(uri = Uri.parse(userProfile.imageUri))
             userProfile.imageUri = url
         }
-        firestore.collection("users").document(uid!!).set(userProfile)
+        firestore.collection("users").document(uid!!).set(userProfile).addOnSuccessListener {
+            onSuccess()
+        }.addOnFailureListener {
+            it.printStackTrace()
+        }
     }
 
     suspend fun updateUserImage(uri: Uri): String {
