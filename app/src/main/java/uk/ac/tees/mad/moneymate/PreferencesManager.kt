@@ -1,6 +1,7 @@
 package uk.ac.tees.mad.moneymate
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -15,8 +16,8 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "us
 class PreferencesManager(private val dataStore: DataStore<Preferences>) {
 
 
-    val themeSetting: Flow<ThemeMode> = dataStore.data.map { preferences ->
-        preferences[PreferencesKeys.THEME_MODE]?.let { ThemeMode.fromString(it) } ?: ThemeMode.LIGHT
+    val themeSetting: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.THEME_MODE] ?: false
     }
 
     val isFingerprintEnabled: Flow<Boolean> = dataStore.data.map { preferences ->
@@ -25,9 +26,9 @@ class PreferencesManager(private val dataStore: DataStore<Preferences>) {
 
     suspend fun toggleTheme() {
         dataStore.edit { preferences ->
-            val currentMode = preferences[PreferencesKeys.THEME_MODE] ?: ThemeMode.LIGHT
-            preferences[PreferencesKeys.THEME_MODE] =
-                if (currentMode == ThemeMode.LIGHT) ThemeMode.DARK.toString() else ThemeMode.LIGHT.toString()
+
+            val isDarkMode = preferences[PreferencesKeys.THEME_MODE] ?: false
+            preferences[PreferencesKeys.THEME_MODE] = !isDarkMode
         }
     }
 
@@ -40,22 +41,6 @@ class PreferencesManager(private val dataStore: DataStore<Preferences>) {
 }
 
 object PreferencesKeys {
-    val THEME_MODE = stringPreferencesKey("theme_mode")
+    val THEME_MODE = booleanPreferencesKey("theme_mode_dark")
     val FINGERPRINT_ENABLED = booleanPreferencesKey("fingerprint_enabled")
 }
-
-enum class ThemeMode {
-    LIGHT,
-    DARK;
-
-    companion object {
-        fun fromString(mode: String?): ThemeMode {
-            return when (mode) {
-                "DARK" -> DARK
-                else -> LIGHT
-            }
-        }
-    }
-}
-
-

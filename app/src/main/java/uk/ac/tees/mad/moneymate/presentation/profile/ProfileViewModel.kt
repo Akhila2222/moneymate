@@ -1,7 +1,5 @@
 package uk.ac.tees.mad.moneymate.presentation.profile
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,11 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import uk.ac.tees.mad.moneymate.PreferencesManager
-import uk.ac.tees.mad.moneymate.ThemeMode
 import uk.ac.tees.mad.moneymate.repo.UserProfile
 import uk.ac.tees.mad.moneymate.repo.UserRepository
 import javax.inject.Inject
@@ -47,7 +43,7 @@ class ProfileViewModel @Inject constructor(
     val themeSetting = preferencesManager.themeSetting.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000L),
-        ThemeMode.LIGHT
+        false
     )
 
     val fingerprintSetting = preferencesManager.isFingerprintEnabled.stateIn(

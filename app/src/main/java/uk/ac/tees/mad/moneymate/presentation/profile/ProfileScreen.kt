@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import uk.ac.tees.mad.moneymate.ThemeMode
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -157,7 +156,7 @@ fun ProfileScreen(
             ) {
                 Text("Dark Mode")
                 Switch(
-                    checked = themeSetting == ThemeMode.DARK,
+                    checked = themeSetting,
                     onCheckedChange = { profileViewModel.toggleTheme() }
                 )
             }
@@ -176,7 +175,6 @@ fun ProfileScreen(
                     onCheckedChange = { profileViewModel.toggleFingerprint() }
                 )
             }
-
 
 
             // Image Picker Dialog
