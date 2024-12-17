@@ -15,6 +15,8 @@ import uk.ac.tees.mad.moneymate.firestore.FirestoreDataSource
 import uk.ac.tees.mad.moneymate.firestore.StorageDataSource
 import uk.ac.tees.mad.moneymate.repo.ExpenseRepository
 import uk.ac.tees.mad.moneymate.repo.UserRepository
+import uk.ac.tees.mad.moneymate.utils.PreferencesManager
+import uk.ac.tees.mad.moneymate.utils.dataStore
 import javax.inject.Singleton
 
 @Module

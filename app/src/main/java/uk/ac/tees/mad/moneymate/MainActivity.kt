@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,7 +18,7 @@ import uk.ac.tees.mad.moneymate.presentation.splash.SplashScreen
 import uk.ac.tees.mad.moneymate.ui.theme.MoneyMateTheme
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -31,6 +32,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("login_screen") {
                         AuthScreen(navController)
+                    }
+                    composable("fingerprint_auth") {
+
                     }
                     composable("dashboard_screen") {
                         DashboardScreen(navController)

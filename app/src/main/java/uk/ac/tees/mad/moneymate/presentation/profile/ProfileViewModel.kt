@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import uk.ac.tees.mad.moneymate.PreferencesManager
+import uk.ac.tees.mad.moneymate.utils.PreferencesManager
 import uk.ac.tees.mad.moneymate.repo.UserProfile
 import uk.ac.tees.mad.moneymate.repo.UserRepository
 import javax.inject.Inject

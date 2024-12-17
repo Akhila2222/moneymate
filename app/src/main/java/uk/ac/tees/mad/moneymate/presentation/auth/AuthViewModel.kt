@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthenticationRepository
+    private val authRepository: AuthenticationRepository,
 ) : ViewModel() {
 
     var authState by mutableStateOf(AuthState())
@@ -44,6 +44,8 @@ class AuthViewModel @Inject constructor(
     fun isAuthenticated(): Boolean {
         return authRepository.isUserAuthenticated()
     }
+
+
 
     fun signOut() {
         authRepository.signOut()

@@ -89,6 +89,10 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
 
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
+
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation ("androidx.biometric:biometric:1.1.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
