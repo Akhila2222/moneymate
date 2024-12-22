@@ -3,6 +3,7 @@ package uk.ac.tees.mad.moneymate.presentation.profile
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,13 +20,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -46,6 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -66,13 +76,44 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Profile") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Go Back")
-                    }
-                }
+                title = { Text("Profile") }
             )
+        },
+        bottomBar = {
+            BottomAppBar {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "dashboard_screen",
+                        onClick = { navController.navigate("dashboard_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Dashboard, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Dashboard")
+                        }
+                    )
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "category_screen",
+                        onClick = { navController.navigate("category_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Category, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Categories")
+                        }
+                    )
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "profile_screen",
+                        onClick = { navController.navigate("profile_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Person, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Profile")
+                        }
+                    )
+                }
+            }
         }
     ) { padding ->
         Column(
@@ -174,6 +215,22 @@ fun ProfileScreen(
                     checked = fingerprintEnabled,
                     onCheckedChange = { profileViewModel.toggleFingerprint() }
                 )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            OutlinedButton(
+                onClick = {
+                    Firebase.auth.signOut()
+                    navController.navigate("login_screen") {
+                        popUpTo("profile_screen")
+                    }
+                },
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error
+                ),
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(text = "Logout")
             }
 
 

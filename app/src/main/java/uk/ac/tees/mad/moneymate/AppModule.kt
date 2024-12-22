@@ -15,6 +15,7 @@ import uk.ac.tees.mad.moneymate.firestore.FirestoreDataSource
 import uk.ac.tees.mad.moneymate.firestore.StorageDataSource
 import uk.ac.tees.mad.moneymate.repo.ExpenseRepository
 import uk.ac.tees.mad.moneymate.repo.UserRepository
+import uk.ac.tees.mad.moneymate.utils.BiometricAuthHelper
 import uk.ac.tees.mad.moneymate.utils.PreferencesManager
 import uk.ac.tees.mad.moneymate.utils.dataStore
 import javax.inject.Singleton
@@ -91,5 +92,11 @@ object AppModule {
         firestore: FirebaseFirestore
     ): UserRepository {
         return UserRepository(firestore, storageDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBiometricAuthHelper(@ApplicationContext context: Context): BiometricAuthHelper {
+        return BiometricAuthHelper(context)
     }
 }

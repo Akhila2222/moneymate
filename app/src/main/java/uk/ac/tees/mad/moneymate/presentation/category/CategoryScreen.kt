@@ -15,14 +15,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -53,22 +60,55 @@ fun CategoryScreen(
     var selectedCategory: Category? by remember { mutableStateOf(null) }
     val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        Modifier.fillMaxSize()
-    ) {
-        TopAppBar(title = {
-            Text(text = "Manage Categories", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Default.ArrowBackIosNew, contentDescription = null)
+    Scaffold(
+        bottomBar = {
+            BottomAppBar {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "dashboard_screen",
+                        onClick = { navController.navigate("dashboard_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Dashboard, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Dashboard")
+                        }
+                    )
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "category_screen",
+                        onClick = { navController.navigate("category_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Category, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Categories")
+                        }
+                    )
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "profile_screen",
+                        onClick = { navController.navigate("profile_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Person, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Profile")
+                        }
+                    )
+                }
             }
-        })
+        },
+        topBar = {
+            TopAppBar(title = {
+                Text(text = "Manage Categories", fontSize = 24.sp, fontWeight = FontWeight.Medium)
+            })
+        }
+    ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(it)
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Input for category name
             OutlinedTextField(

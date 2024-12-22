@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import uk.ac.tees.mad.moneymate.presentation.auth.AuthViewModel
 import uk.ac.tees.mad.moneymate.presentation.profile.ProfileViewModel
 
 private val LightColorScheme = lightColorScheme(
@@ -43,7 +44,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun MoneyMateTheme(
     dynamicColor: Boolean = true,
-    profileViewModel: ProfileViewModel = hiltViewModel(),
+    profileViewModel: AuthViewModel = hiltViewModel(),
     content: @Composable () -> Unit
 ) {
     val isDark by profileViewModel.themeSetting.collectAsState()

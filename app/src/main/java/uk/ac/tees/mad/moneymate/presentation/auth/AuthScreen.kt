@@ -68,14 +68,6 @@ fun AuthScreen(
     val rotation = remember { Animatable(0f) }
     val scale = remember { Animatable(1f) }
 
-    LaunchedEffect(Unit) {
-        if (viewModel.isAuthenticated()) {
-            navController.navigate("dashboard_screen") {
-                popUpTo("login_screen") { inclusive = true }
-            }
-        }
-    }
-
     LaunchedEffect(isLoginScreen) {
         rotation.animateTo(
             targetValue = 360f,
@@ -98,10 +90,12 @@ fun AuthScreen(
         )
     }
 
-    // Authentication successful, navigate to dashboard
     if (authState.isAuthenticated) {
-        navController.navigate("dashboard_screen") {
-            popUpTo("auth_screen") { inclusive = true }
+        LaunchedEffect(Unit) {
+
+            navController.navigate("dashboard_screen") {
+                popUpTo("auth_screen") { inclusive = true }
+            }
         }
     }
 
@@ -125,6 +119,7 @@ fun AuthScreen(
             )
 
             Spacer(modifier = Modifier.height(30.dp))
+
             Column(
                 modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
@@ -132,7 +127,6 @@ fun AuthScreen(
                     .padding(40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
 
                 Text(
                     text = if (isLoginScreen) "Login" else "Sign Up",
@@ -143,7 +137,7 @@ fun AuthScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Name input
+                // Name input (only for Sign Up)
                 if (!isLoginScreen) {
                     OutlinedTextField(
                         value = name,
@@ -154,17 +148,15 @@ fun AuthScreen(
                             Icon(
                                 imageVector = Icons.Default.Person,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onPrimary
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         },
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                            focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                            cursorColor = MaterialTheme.colorScheme.onPrimary,
-                            focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
-                        ), keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                            cursorColor = MaterialTheme.colorScheme.onSurface
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -179,16 +171,13 @@ fun AuthScreen(
                         Icon(
                             imageVector = Icons.Default.Email,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                        focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                        cursorColor = MaterialTheme.colorScheme.onPrimary,
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
                     ),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                 )
@@ -206,19 +195,15 @@ fun AuthScreen(
                         Icon(
                             imageVector = Icons.Default.Lock,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                        focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                        cursorColor = MaterialTheme.colorScheme.onPrimary,
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                        cursorColor = MaterialTheme.colorScheme.onSurface
                     ),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
-
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -238,8 +223,8 @@ fun AuthScreen(
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary,
-                            contentColor = MaterialTheme.colorScheme.primary
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -257,11 +242,11 @@ fun AuthScreen(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
-
             }
+
             authState.errorMessage?.let {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = it, color = Color.Red)
+                Text(text = it, color = MaterialTheme.colorScheme.error)
             }
         }
     }

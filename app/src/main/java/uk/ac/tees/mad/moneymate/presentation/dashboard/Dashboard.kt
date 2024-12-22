@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
@@ -86,6 +87,16 @@ fun DashboardScreen(
         bottomBar = {
             BottomAppBar {
                 NavigationBar {
+                    NavigationBarItem(
+                        selected = navController.currentBackStackEntry?.destination?.route == "dashboard_screen",
+                        onClick = { navController.navigate("dashboard_screen") },
+                        icon = {
+                            Icon(imageVector = Icons.Default.Dashboard, contentDescription = null)
+                        },
+                        label = {
+                            Text(text = "Dashboard")
+                        }
+                    )
                     NavigationBarItem(
                         selected = navController.currentBackStackEntry?.destination?.route == "category_screen",
                         onClick = { navController.navigate("category_screen") },

@@ -19,16 +19,14 @@ class BiometricAuthHelper @Inject constructor(private val context: Context) {
     fun authenticate(
         onSuccess: () -> Unit,
         onError: (String) -> Unit,
-        onFailed: () -> Unit
+        onFailed: () -> Unit,
+        fContext: FragmentActivity
     ) {
-        if (context !is FragmentActivity) {
-            onError("Invalid context")
-            return
-        }
 
         val executor = ContextCompat.getMainExecutor(context)
 
-        val biometricPrompt = BiometricPrompt(context, executor,
+        val biometricPrompt = BiometricPrompt(
+            fContext, executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
