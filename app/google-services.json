@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "314410759195",
-    "project_id": "moneymate-bce7f",
+    "project_number": "869620808016",
+    "project_id": "moneymate-94e1b",
     "storage_bucket": "moneymate-bce7f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:314410759195:android:b9fdf26efb60cb4e4e34be",
+        "mobilesdk_app_id": "1:869620808016:android:afba8c846a83cdb9635455",
         "android_client_info": {
           "package_name": "uk.ac.tees.mad.moneymate"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBQDhDO72AEMFPTHKCCRWj5UV3_GvAzP6Y"
+          "current_key": "AIzaSyBA8AXe8NIl4CP0h2PmLT3x5A6rbRikI3I"
         }
       ],
       "services": {
